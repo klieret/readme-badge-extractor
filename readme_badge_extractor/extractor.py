@@ -5,7 +5,7 @@ from pathlib import PurePath, Path
 import re
 
 # ours
-from readme_badge_extractor.badge import Badge
+from readme_badge_extractor.badge import Badge, remove_badge_duplicates
 
 
 class Extractor(ABC):
@@ -25,7 +25,9 @@ image_badge_regex = re.compile(r"\[!\[(.*)]\(([^)]*)\)]\(([^)]*)\)")
 
 class DefaultExtractor(Extractor):
     def extract_from_string(self, string: str) -> List[Badge]:
-        return [
-            Badge(image_alt=hit[0], image_url=hit[1], url=hit[2])
-            for hit in image_badge_regex.findall(string)
-        ]
+        return remove_badge_duplicates(
+            [
+                Badge(image_alt=hit[0], image_url=hit[1], url=hit[2])
+                for hit in image_badge_regex.findall(string)
+            ]
+        )

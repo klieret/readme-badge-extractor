@@ -1,4 +1,4 @@
-from typing import NamedTuple
+from typing import NamedTuple, List
 
 
 class Badge(NamedTuple):
@@ -8,3 +8,16 @@ class Badge(NamedTuple):
 
     def to_html(self) -> str:
         pass
+
+
+def remove_badge_duplicates(badges: List[Badge]) -> List[Badge]:
+    """Remove duplicates among badges. Where for a duplicate, it is enough
+    when the url is the same.
+    """
+    urls = []
+    return_badges = []
+    for badge in badges:
+        if badge.url not in urls:
+            return_badges.append(badge)
+        urls.append(badge.url)
+    return return_badges
