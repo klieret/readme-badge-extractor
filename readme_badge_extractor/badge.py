@@ -7,7 +7,7 @@ class Badge(NamedTuple):
     url: str = ""
 
     def to_html(self) -> str:
-        pass
+        return f'<a href="{self.url}"><img src="{self.image_url}" alt="{self.image_alt}"></a>'
 
 
 def remove_badge_duplicates(badges: List[Badge]) -> List[Badge]:
