@@ -29,9 +29,24 @@ class Extractor(ABC):
         pass
 
 
+_is_svg_url_regex = re.compile(r"^.*\.svg\??")
+
+
+def is_svg_url(url: str) -> bool:
+    """Does the URL point to a svg image?"""
+    return bool(_is_svg_url_regex.findall(url))
+
+
 class DefaultExtractor(Extractor):
-    def __init__(self, **kwargs):
+    def __init__(self, require_svg=True, **kwargs):
+        """
+
+        Args:
+            require_svg: Only svg images are considered for badges
+            **kwargs:
+        """
         super().__init__(**kwargs)
+        self.require_svg = require_svg
         self.image_badge_regex = re.compile(r"\[!\[(.*)]\(([^)]*)\)]\(([^)]*)\)")
 
     def extract_from_string(self, string: str) -> List[Badge]:
@@ -39,6 +54,8 @@ class DefaultExtractor(Extractor):
             Badge(image_alt=hit[0], image_url=hit[1], url=hit[2])
             for hit in self.image_badge_regex.findall(string)
         ]
+        if self.require_svg:
+            badges = [badge for badge in badges if is_svg_url(badge.url)]
         badges_wo_dupes = remove_badge_duplicates(badges)
         n_duplicates_removed = len(badges) - len(badges_wo_dupes)
         if n_duplicates_removed:
