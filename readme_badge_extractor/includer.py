@@ -4,11 +4,12 @@ from abc import ABC, abstractmethod
 
 # ours
 from readme_badge_extractor.extractor import Extractor
+from readme_badge_extractor.util.log import lon, OL
 
 
 class Includer(ABC):
-    def __init__(self, **kwargs):
-        pass
+    def __init__(self, *, log: OL = None, **kwargs):
+        self.log = lon(log)
 
     @abstractmethod
     def include_in_string(self, extractor: Extractor, string) -> str:
