@@ -11,13 +11,11 @@ class Badge(NamedTuple):
 
 
 def remove_badge_duplicates(badges: List[Badge]) -> List[Badge]:
-    """Remove duplicates among badges. Where for a duplicate, it is enough
-    when the url is the same.
-    """
+    """Remove badges that share the image url. Order is kept."""
     urls = []
     return_badges = []
     for badge in badges:
-        if badge.url not in urls:
+        if badge.image_url not in urls:
             return_badges.append(badge)
-        urls.append(badge.url)
+        urls.append(badge.image_url)
     return return_badges
