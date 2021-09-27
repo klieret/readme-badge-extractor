@@ -2,6 +2,7 @@
 
 👇 These small image links are called "badges"
 
+[![gh actions](https://github.com/klieret/readme-badge-extractor/actions/workflows/test.yaml/badge.svg)](https://github.com/klieret/readme-badge-extractor/actions)
 [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/klieret/readme-badge-extractor/main.svg)](https://results.pre-commit.ci/latest/github/klieret/readme-badge-extractor/main)
 [![Black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/python/black)
 [![License](https://img.shields.io/github/license/klieret/readme-badge-extractor.svg)](https://github.com/klieret/readme-badge-extractor/blob/main/LICENSE.txt)
