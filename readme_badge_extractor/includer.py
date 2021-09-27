@@ -20,7 +20,7 @@ class DefaultIncluder(Includer):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.replace_regex = re.compile(
-            "([\t ]*)<!-- README-BADGES-START(.*?)-->(.*?)<!-- README-BADGES-END -->",
+            r"([\t ]*)<!--\s*README-BADGES-START(.*?)\s*-->(.*?)<!--\s*README-BADGES-END\s*-->",
             flags=re.DOTALL,
         )
 

@@ -15,13 +15,15 @@ class Extractor(ABC):
         self.log = lon(log)
 
     def extract_from_url(self, url: str) -> List[Badge]:
-        self.log.info(f"Downloading {url}")
         text = urllib.request.urlopen(url).read().decode()
+        n_lines = len(text.split("\n"))
+        self.log.info(f"Read {n_lines} lines from {url}")
         return self.extract_from_string(text)
 
     def extract_from_file(self, file: Union[str, PurePath]) -> List[Badge]:
-        self.log.info(f"Reading {file}")
         text = Path(file).read_text()
+        n_lines = len(text.split("\n"))
+        self.log.info(f"Read {n_lines} from {file}")
         return self.extract_from_string(text)
 
     @abstractmethod
@@ -55,10 +57,19 @@ class DefaultExtractor(Extractor):
             for hit in self.image_badge_regex.findall(string)
         ]
         if self.require_svg:
-            badges = [badge for badge in badges if is_svg_url(badge.url)]
+            n_before = len(badges)
+            badges = [badge for badge in badges if is_svg_url(badge.image_url)]
+            n_removed = n_before - len(badges)
+            if n_removed:
+                self.log.debug(
+                    f"Removed {n_removed} badges because they weren't svg "
+                    f"images"
+                )
         badges_wo_dupes = remove_badge_duplicates(badges)
         n_duplicates_removed = len(badges) - len(badges_wo_dupes)
         if n_duplicates_removed:
             self.log.debug(f"Removed {n_duplicates_removed} duplicated badges")
         self.log.debug(f"Extracted {len(badges_wo_dupes)} badges")
+        if not badges_wo_dupes:
+            self.log.warning("Did not find any badges")
         return badges_wo_dupes
