@@ -1,1 +1,2 @@
 include readme_badge_extractor/version.txt
+recursive-include readme_badge_extractor/test/test_data/*

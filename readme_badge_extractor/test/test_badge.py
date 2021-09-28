@@ -1,4 +1,5 @@
-from readme_badge_extractor.badge import Badge, remove_badge_duplicates
+from readme_badge_extractor.badge import Badge, badges_to_serializable, \
+    remove_badge_duplicates
 
 
 def test_badge_to_html():
@@ -14,3 +15,8 @@ def test_remove_badge_duplicats():
     b = Badge(url="3", image_url="b")
     b2 = Badge(url="4", image_url="b")
     assert remove_badge_duplicates([a, a2, b, b2]) == [a, b]
+
+
+def test_badges_to_serializable():
+    badges = [Badge(image_url="a", image_alt="b", url="c")]
+    assert badges_to_serializable(badges) == [dict(image_url="a", image_alt="b", url="c")]
