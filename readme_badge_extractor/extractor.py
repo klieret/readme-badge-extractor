@@ -1,6 +1,6 @@
 # std
 from abc import ABC, abstractmethod
-from typing import List, Union
+from typing import List, Union, Optional
 from pathlib import PurePath, Path
 import re
 import urllib.request
@@ -31,24 +31,34 @@ class Extractor(ABC):
         pass
 
 
-_is_svg_url_regex = re.compile(r"^.*\.svg\??")
+def is_allowed_extension(
+    url: str, allowed_extensions: Optional[List[str]]
+) -> bool:
+    """Check whether the url points to an image with an allowed extension.
 
+    Args:
+        url:
+        allowed_extensions: If None, do not check extension
 
-def is_svg_url(url: str) -> bool:
-    """Does the URL point to a svg image?"""
-    return bool(_is_svg_url_regex.findall(url))
+    Returns:
+        bool
+    """
+    if allowed_extensions is None:
+        return True
+    return url.split("?")[0].split(".")[-1] in allowed_extensions
 
 
 class DefaultExtractor(Extractor):
-    def __init__(self, require_svg=True, **kwargs):
+    def __init__(self, allowed_extensions: Optional[List[str]] = None, **kwargs):
         """
 
         Args:
-            require_svg: Only svg images are considered for badges
+            allowed_extensions: Only images with these extensions are considered
+                as badges. If None, do not check extension
             **kwargs:
         """
         super().__init__(**kwargs)
-        self.require_svg = require_svg
+        self.allowed_extensions = allowed_extensions
         self.image_badge_regex = re.compile(r"\[!\[(.*)]\(([^)]*)\)]\(([^)]*)\)")
 
     def extract_from_string(self, string: str) -> List[Badge]:
@@ -56,9 +66,13 @@ class DefaultExtractor(Extractor):
             Badge(image_alt=hit[0], image_url=hit[1], url=hit[2])
             for hit in self.image_badge_regex.findall(string)
         ]
-        if self.require_svg:
+        if self.allowed_extensions:
             n_before = len(badges)
-            badges = [badge for badge in badges if is_svg_url(badge.image_url)]
+            badges = [
+                badge
+                for badge in badges
+                if is_allowed_extension(badge.image_url, self.allowed_extensions)
+            ]
             n_removed = n_before - len(badges)
             if n_removed:
                 self.log.debug(

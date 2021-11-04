@@ -1,4 +1,7 @@
-from readme_badge_extractor.extractor import DefaultExtractor, is_svg_url
+from readme_badge_extractor.extractor import (
+    DefaultExtractor,
+    is_allowed_extension,
+)
 
 
 def test_default_extractor_extract_from_url():
@@ -20,8 +23,8 @@ def test_default_extractor_regex():
     ]
 
 
-def test_is_svg_url():
-    assert is_svg_url("asdf/a.svg")
-    assert is_svg_url("asdf/a.svg?a=5")
-    assert not is_svg_url("asdf/a")
-    assert not is_svg_url("")
+def test_is_allowed_extension():
+    assert is_allowed_extension("asdf/a.svg", None)
+    assert is_allowed_extension("asdf/a.svg?a=5", ["svg"])
+    assert not is_allowed_extension("asdf/a", ["png"])
+    assert is_allowed_extension("", None)
