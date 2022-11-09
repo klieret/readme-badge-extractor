@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Set up Python 3.8
         uses: actions/setup-python@v2
         with:
@@ -57,7 +57,7 @@ jobs:
             artifact: readme-badge-extractor-*.tar.gz
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - uses: actions/download-artifact@v2
       with:
         name: readme-badge-extractor dist ${{ github.run_number }}
@@ -92,4 +92,4 @@ jobs:
       run: |
         cd dist
         pytest --pyargs readme_badge_extractor
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
