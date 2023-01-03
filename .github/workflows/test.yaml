@@ -45,15 +45,17 @@ jobs:
     strategy:
       matrix:
         os:  [ubuntu]
-        python-version: [3.6, 3.7, 3.8, 3.9]
+        python-version: ["3.7", "3.8", "3.9", "3.10", 3.11]
         include:
-          - python-version: 3.6
+          - python-version: "3.7"
             artifact: readme-badge-extractor-*.tar.gz
-          - python-version: 3.7
+          - python-version: "3.8"
             artifact: readme-badge-extractor-*.tar.gz
-          - python-version: 3.8
+          - python-version: "3.9"
             artifact: readme-badge-extractor-*.tar.gz
-          - python-version: 3.9
+          - python-version: "3.10"
+            artifact: readme-badge-extractor-*.tar.gz
+          - python-version: "3.11"
             artifact: readme-badge-extractor-*.tar.gz
 
     steps:
