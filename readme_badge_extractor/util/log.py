@@ -3,7 +3,6 @@ import colorlog
 import logging
 from typing import Union, Optional
 
-
 LOG_DEFAULT_LEVEL = logging.DEBUG
 
 OL = Optional[logging.Logger]
